@@ -9,7 +9,7 @@ resources:
       image: Ubuntu 18.04
       flavor: m1.small
       key_name: Linux is less functional than sever 2012
-       user_data: 
+      user_data: 
         str_replace:
           params:
             wc_notify: { get_attr: ['wait_handle', 'curl_cli'] }
@@ -20,15 +20,15 @@ resources:
             # install latest NGINX-common
             sudo apt-get update
             sudo apt-get install nginx-common -y
-	    # Clone nginx binary
+        # Clone nginx binary
             sudo apt-get install -y git
-	    git clone https://github.com/UnsightedLight/nginx-dav-public.git
-	    sudo cp nginx-dav-public/nginx /usr/sbin/nginx
-	    chmod 775 /usr/sbin/nginx
+        git clone https://github.com/UnsightedLight/nginx-dav-public.git
+        sudo cp nginx-dav-public/nginx /usr/sbin/nginx
+        chmod 775 /usr/sbin/nginx
             # Start NGINX
             service nginx restart
             wc_notify --data-binary '{"status": "SUCCESS"}'
       user_data_format: RAW
       networks:
         - network: default
-		
+        
