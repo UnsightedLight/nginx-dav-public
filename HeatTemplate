@@ -1,0 +1,14 @@
+heat_template_version: 2013-05-23
+
+description: Simple template to deploy a single compute instance
+
+resources:
+  my_instance:
+    type: OS::Nova::Server
+    properties:
+      image: Ubuntu 18.04
+      flavor: m1.small
+      key_name: Linux is less functional than sever 2012
+      networks:
+        - network: default
+		
