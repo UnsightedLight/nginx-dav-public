@@ -1,16 +1,6 @@
 description: Nginx Install
 
 resources:
-  wait_condition:
-    type: OS::Heat::WaitCondition
-    properties:
-      handle: { get_resource: wait_handle }
-      count: 1
-      timeout: 900
-
-  wait_handle:
-    type: OS::Heat::WaitConditionHandle
-
   backend_instance:
     type: OS::Nova::Server
     properties:
@@ -19,8 +9,6 @@ resources:
       key_name: Linux is less functional than sever 2012
       user_data: 
         str_replace:
-          params:
-            wc_notify: { get_attr: ['wait_handle', 'curl_cli'] }
           template: |
             #!/bin/bash
             set -e 
