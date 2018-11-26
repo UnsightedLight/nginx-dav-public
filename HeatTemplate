@@ -1,4 +1,12 @@
+heat_template_version: 2014-10-16
+
 description: Nginx Install
+
+parameters:
+  GitURL:
+    type: string
+    label: Git URL
+    description: Git URl
 
 resources:
   backend_instance:
@@ -6,25 +14,24 @@ resources:
     properties:
       image: Ubuntu 18.04
       flavor: m1.small
-      key_name: Linux is less functional than sever 2012
+      key_name: Test
       user_data: 
         str_replace:
-          template: |
+          template:  |
             #!/bin/bash
-            set -e 
-            set -o pipefail
+            sudo touch /etc/fileran
             # install latest NGINX-common
             sudo apt-get update
-            sudo apt-get install nginx-common -y
+            sudo apt-get install nginx-common liblua5.1-0 -y
             # Clone nginx binary
             sudo apt-get install -y git
-            git clone https://github.com/UnsightedLight/nginx-dav-public.git
+            git clone $url
             sudo cp nginx-dav-public/nginx /usr/sbin/nginx
             chmod 775 /usr/sbin/nginx
             # Start NGINX
             service nginx restart
-            wc_notify --data-binary '{"status": "SUCCESS"}'
+          params:
+            $url: { get_param: GitURL }
       user_data_format: RAW
       networks:
         - network: default
-        
