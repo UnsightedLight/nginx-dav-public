@@ -1,6 +1,6 @@
 heat_template_version: 2014-10-16
 
-description: Nginx Install
+description: Project Install
 
 parameters:
   GitURL:
@@ -9,7 +9,7 @@ parameters:
     description: Git URl
 
 resources:
-  backend_instance:
+  nginx_instance:
     type: OS::Nova::Server
     properties:
       image: Ubuntu 18.04
@@ -30,6 +30,42 @@ resources:
             chmod 775 /usr/sbin/nginx
             # Start NGINX
             service nginx restart
+          params:
+            $url: { get_param: GitURL }
+      user_data_format: RAW
+      networks:
+        - network: default
+  zabbix_instance:
+    type: OS::Nova::Server
+    properties:
+      image: Ubuntu 18.04
+      flavor: m1.small
+      key_name: Test
+      user_data: 
+        str_replace:
+          template:  |
+            #!/bin/bash
+            sudo touch /etc/fileran
+            # install latest LAMP stack
+            sudo apt-get update
+            sudo apt-get install -y apache2
+            sudo apt-get install -y mysql-server
+            sudo apt-get install -y php php-mbstring php-gd php-xml php-bcmath php-ldap php-mysql
+            # install zabbix server
+            wget http://repo.zabbix.com/zabbix/3.4/ubuntu/pool/main/z/zabbix-release/zabbix-release_3.4-1+bionic_all.deb
+            sudo dpkg -i zabbix-release_3.4-1+bionic_all.deb
+            sudo apt-get update
+            sudo apt-get install -y zabbix-server-mysql zabbix-frontend-php
+            # Get zabbix-db ready
+            sudo apt-get install -y git
+            git clone $url
+            sudo mysql -u root < nginx-dav-public/zabbix.mysql
+            zcat /usr/share/doc/zabbix-server-mysql/create.sql.gz | sudo mysql -u root zabbix
+            sudo echo "DBHost=localhost" >> /etc/zabbix/zabbix_server.conf
+            sudo echo "DBPassword=password" >> /etc/zabbix/zabbix_server.conf
+            # Start services
+            sudo service apache2 restart
+            sudo service zabbix-server restart
           params:
             $url: { get_param: GitURL }
       user_data_format: RAW
