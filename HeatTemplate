@@ -48,22 +48,34 @@ resources:
             sudo touch /etc/fileran
             # install latest LAMP stack
             sudo apt-get update
+            echo "Installing apache2 ..." > /tmp/install
             sudo apt-get install -y apache2
+            echo "Installing mysql-server ..." >> /tmp/install
             sudo apt-get install -y mysql-server
+            echo "Installing php bullshit ..." >> /tmp/install
             sudo apt-get install -y php php-mbstring php-gd php-xml php-bcmath php-ldap php-mysql
             # install zabbix server
+            echo "Fetching zabbix repo ..." >> /tmp/install
             wget http://repo.zabbix.com/zabbix/3.4/ubuntu/pool/main/z/zabbix-release/zabbix-release_3.4-1+bionic_all.deb
+            echo "Adding repo to apt ..." >> /tmp/install
             sudo dpkg -i zabbix-release_3.4-1+bionic_all.deb
             sudo apt-get update
+            echo "Installing zabbix-server ..." >> /tmp/install
             sudo apt-get install -y zabbix-server-mysql zabbix-frontend-php
             # Get zabbix-db ready
+            echo "Installing git ..." >> /tmp/install
             sudo apt-get install -y git
+            echo "Cloning super secret repo ..." >> /tmp/install
             git clone $url
+            echo "Creating zabbix database ..." >> /tmp/install
             sudo mysql -u root < nginx-dav-public/zabbix.mysql
+            echo "Prepping zabbix database ..." >> /tmp/install
             zcat /usr/share/doc/zabbix-server-mysql/create.sql.gz | sudo mysql -u root zabbix
+            echo "Modifying zabbix config ..." >> /tmp/install
             sudo echo "DBHost=localhost" >> /etc/zabbix/zabbix_server.conf
             sudo echo "DBPassword=password" >> /etc/zabbix/zabbix_server.conf
             # Start services
+            echo "Attempting to restart apache2 & zabbix-server ..." >> /tmp/install
             sudo service apache2 restart
             sudo service zabbix-server restart
           params:
