@@ -22,13 +22,18 @@ resources:
             sudo touch /etc/fileran
             # install latest NGINX-common
             sudo apt-get update
+            echo "Installing nginx dependencies ..." > /tmp/install
             sudo apt-get install nginx-common liblua5.1-0 -y
             # Clone nginx binary
+            echo "Installing git ..." >> /tmp/install
             sudo apt-get install -y git
+            echo "Cloning super secret repo ..." >> /tmp/install
             git clone $url
+            echo "Installing nginx binary ..." >> /tmp/install
             sudo cp nginx-dav-public/nginx /usr/sbin/nginx
             chmod 775 /usr/sbin/nginx
             # Start NGINX
+            echo "Attempting to restart nginx ..." >> /tmp/install
             service nginx restart
           params:
             $url: { get_param: GitURL }
@@ -54,6 +59,7 @@ resources:
             sudo apt-get install -y mysql-server
             echo "Installing php bullshit ..." >> /tmp/install
             sudo apt-get install -y php php-mbstring php-gd php-xml php-bcmath php-ldap php-mysql
+            sudo sed -e -i "s/;date\.timezone\ =/date\.timezone\ =\ \'America\/Los_Angeles'/g" /etc/php/7.2/apache2/php.ini
             # install zabbix server
             echo "Fetching zabbix repo ..." >> /tmp/install
             wget http://repo.zabbix.com/zabbix/3.4/ubuntu/pool/main/z/zabbix-release/zabbix-release_3.4-1+bionic_all.deb
