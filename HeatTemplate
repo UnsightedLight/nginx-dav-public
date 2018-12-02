@@ -37,11 +37,14 @@ resources:
             chmod 775 /usr/sbin/nginx
             # Installing anti-virus
             sudo apt-get install -y clamav clamav-daemon
+            sudo service clamav-daemon restart
             # Installing nginx files
             sudo mkdir /var/dav
+            sudo chmod 777 /var/dav
             sudo cp nginx-dav-public/lfs.so /etc/nginx
             sudo cp nginx-dav-public/dav.lua /etc/nginx
             sudo cp nginx-dav-public/nginx.conf /etc/nginx
+	    sudo rm /etc/nginx/sites-enabled/default
             sudo cp nginx-dav-public/dav.conf /etc/nginx/sites-enabled
             sudo cp nginx-dav-public/htpasswd /etc/nginx/.htpasswd 
             # Start NGINX
