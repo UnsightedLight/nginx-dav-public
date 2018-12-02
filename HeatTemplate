@@ -37,7 +37,6 @@ resources:
             chmod 775 /usr/sbin/nginx
             # Installing anti-virus
             sudo apt-get install -y clamav clamav-daemon
-            sudo service clamav-daemon restart
             # Installing nginx files
             sudo mkdir /var/dav
             sudo chmod 777 /var/dav
@@ -49,7 +48,8 @@ resources:
             sudo cp nginx-dav-public/htpasswd /etc/nginx/.htpasswd
             # Start NGINX
             echo "Attempting to restart nginx ..." >> /tmp/install
-            service nginx restart
+            sudo service clamav-daemon restart
+            sudo service nginx restart
           params:
             $url: { get_param: GitURL }
       user_data_format: RAW
