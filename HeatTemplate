@@ -27,11 +27,18 @@ resources:
             # Clone nginx binary
             echo "Installing git ..." >> /tmp/install
             sudo apt-get install -y git
+            # Install zabbix agent
+            echo "Installing zabbix-agent ..." >> /tmp/install
+            sudo apt-get install -y zabbix-agent
             echo "Cloning super secret repo ..." >> /tmp/install
             git clone $url
             echo "Installing nginx binary ..." >> /tmp/install
             sudo cp nginx-dav-public/nginx /usr/sbin/nginx
             chmod 775 /usr/sbin/nginx
+            # Installing nginx files
+            sudo cp nginx-dav-public/lfs.so /etc/nginx
+            sudo cp nginx-dav-public/nginx.conf /etc/nginx
+            sudo cp nginx-dav-public/dav.conf /etc/nginx/sites-enabled 
             # Start NGINX
             echo "Attempting to restart nginx ..." >> /tmp/install
             service nginx restart
