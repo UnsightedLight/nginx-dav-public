@@ -44,7 +44,7 @@ resources:
             sudo cp nginx-dav-public/lfs.so /etc/nginx
             sudo cp nginx-dav-public/dav.lua /etc/nginx
             sudo cp nginx-dav-public/nginx.conf /etc/nginx
-	    sudo rm /etc/nginx/sites-enabled/default
+            sudo rm /etc/nginx/sites-enabled/default
             sudo cp nginx-dav-public/dav.conf /etc/nginx/sites-enabled
             sudo cp nginx-dav-public/htpasswd /etc/nginx/.htpasswd 
             # Start NGINX
