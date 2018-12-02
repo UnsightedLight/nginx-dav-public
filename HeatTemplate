@@ -35,10 +35,15 @@ resources:
             echo "Installing nginx binary ..." >> /tmp/install
             sudo cp nginx-dav-public/nginx /usr/sbin/nginx
             chmod 775 /usr/sbin/nginx
+            # Installing anti-virus
+            sudo apt-get install -y clamav clamav-daemon
             # Installing nginx files
+            sudo mkdir /var/dav
             sudo cp nginx-dav-public/lfs.so /etc/nginx
+            sudo cp nginx-dav-public/dav.lua /etc/nginx
             sudo cp nginx-dav-public/nginx.conf /etc/nginx
-            sudo cp nginx-dav-public/dav.conf /etc/nginx/sites-enabled 
+            sudo cp nginx-dav-public/dav.conf /etc/nginx/sites-enabled
+            sudo cp nginx-dav-public/htpasswd /etc/nginx/.htpasswd 
             # Start NGINX
             echo "Attempting to restart nginx ..." >> /tmp/install
             service nginx restart
