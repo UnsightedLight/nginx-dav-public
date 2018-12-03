@@ -50,6 +50,7 @@ resources:
             sudo cp nginx-dav-public/htpasswd /etc/nginx/.htpasswd
             # Start NGINX
             echo "Attempting to restart nginx ..." >> /tmp/install
+	    sleep 15
             sudo service clamav-daemon restart
             sudo service nginx restart
           params:
